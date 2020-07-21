@@ -28,16 +28,22 @@ As per: https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolu
 
 This is a cumbersome limitation because you might need to reference a service at the node level.
 
-As an example, one situation where this is an issue with NFS-backed PersistentVolumes:
-- Assuming you run an NFS server on a StatefulSet
-- And that NFS server container is exported as `nfs-service`
+As an example, one situation where this is an issue is with NFS-backed PersistentVolumes. Assuming:
+- You run an NFS server on a StatefulSet
+- That NFS server is exported via a service named `nfs-service`
+- You do not want it exposed to the world (so you don't have the option of setting up an Ingress for example)
 
-Then you can't readily mount an NFS-type PersistentVolume that uses `nfs-service` for provision.
+Then you just cannot mount it as a PersistentVolume for other nodes...
 
 Indeed, the node is the one to mount the volume, not the pod. So the node will be the one trying to
-communicate with `nfs-server`, and pathetically fail with `cannot resolve nfs-service.svc.cluster.local`
+communicate with `nfs-server` to provide it, and pathetically fail with `cannot resolve nfs-service.svc.cluster.local`.
 
 ## How this works
+
+There's a few steps:
+1. Execute commands on the host from a container
+2. Update the host's DNS configuration
+3. Ensure this container runs on every node and has a reasonable lifecycle
 
 ### Executing commands on the node from a container
 
