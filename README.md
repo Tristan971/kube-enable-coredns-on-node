@@ -88,6 +88,11 @@ workarounds, and might still be the right solution long-term for this.
 
 ## Usage
 
+There's only one flag, `DRY_RUN`. 
+- Unless it is defined, and has value `false`, the run will only print the resulting
+`/etc/systemd/resolved.conf` that it would have written.
+- If it is set to `true` the run will backup `/etc/systemd/resolved.conf` to `/etc/systemd/resolved.conf-<unix timestamp of run>-bak`
+
 Here's a sample DaemonSet
 
 ```yaml
