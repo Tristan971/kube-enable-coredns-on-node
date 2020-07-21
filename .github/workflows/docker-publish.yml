@@ -19,19 +19,24 @@ env:
 
 jobs:
 
-  - name: Push to Docker Hub
-    uses: docker/build-push-action@v1
-    with:
-      username: tristandeloche
-      password: ${{ secrets.DOCKERHUB_TOKEN }}
-      repository: tristandeloche/$IMAGE_NAME
-      tag_with_ref: true
+  build:
 
-  - name: Push to GitHub Packages
-    uses: docker/build-push-action@v1
-    with:
-      username: ${{ github.actor }}
-      password: ${{ secrets.GITHUB_TOKEN }}
-      registry: docker.pkg.github.com
-      repository: tristandeloche/$IMAGE_NAME
-      tag_with_ref: true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Push to Docker Hub
+        uses: docker/build-push-action@v1
+        with:
+          username: tristandeloche
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: tristandeloche/$IMAGE_NAME
+          tag_with_ref: true
+
+      - name: Push to GitHub Packages
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: docker.pkg.github.com
+          repository: tristandeloche/$IMAGE_NAME
+          tag_with_ref: true
