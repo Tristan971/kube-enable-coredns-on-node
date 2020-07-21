@@ -29,7 +29,7 @@ jobs:
         with:
           username: tristandeloche
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: tristandeloche/$IMAGE_NAME
+          repository: tristandeloche/${{ env.DOCKERHUB_TOKEN }}
           tag_with_ref: true
 
       - name: Push to GitHub Packages
@@ -38,5 +38,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: tristandeloche/$IMAGE_NAME
+          repository: tristandeloche/${{ env.DOCKERHUB_TOKEN }}
           tag_with_ref: true
