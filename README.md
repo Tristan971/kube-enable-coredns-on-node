@@ -1,5 +1,9 @@
 # Add CoreDNS to a k8s' node's DNS servers
 
+![Docker](https://github.com/Tristan971/kube-enable-coredns-on-node/workflows/Docker/badge.svg)
+![Docker Pulls](https://img.shields.io/docker/pulls/tristandeloche/kube-enable-coredns-on-node.svg?style=popout)
+[![Docker layers](https://images.microbadger.com/badges/image/tristandeloche/kube-enable-coredns-on-node.svg)](https://microbadger.com/images/tristandeloche/kube-enable-coredns-on-node)
+
 #### WARNING: 
     I DO NOT RECOMMEND USING THIS ON YOUR PRODUCTION CLUSTER
     
