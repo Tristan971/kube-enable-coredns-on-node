@@ -43,9 +43,9 @@ echo ""
 echo "---"
 echo ""
 
-echo "Will prepend $COREDNS_IP to the DNS=... values on host"
-PRE="^#?DNS=\(.*\)$"
-POST="DNS=$COREDNS_IP,\\\1"
+echo "Will set $COREDNS_IP as DNS=... value on host"
+PRE="^#?DNS=.*$"        # note that we don't just prepend but
+POST="DNS=$COREDNS_IP"  # replace every existing DNS with coredns
 
 if [ "${DRY_RUN:-true}" == "false" ]; then
   BACKUP_SUFFIX="-$(date +%s)-bak"

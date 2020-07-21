@@ -5,7 +5,7 @@ the node level, like when binding an NFS volume hoster on the cluster
 for another node.
 
 It works by getting a hold of the CoreDNS IP within the container,
-escaping its container through `nsenter`, prepending CoreDNS in the
+escaping its container through `nsenter`, setting CoreDNS in the
 standard `systemd-resolved` source (`/etc/systemd/resolved.conf`),
 and then reloading the `systemd-resolved` service.
 
