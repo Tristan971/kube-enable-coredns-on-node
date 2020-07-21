@@ -14,26 +14,52 @@ on:
     tags:
       - v*
 
+env:
+  IMAGE_NAME: kube-enable-coredns-on-node
+
 jobs:
 
-  build:
+  push:
 
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
 
     steps:
-      - name: Push to Docker Hub
-        uses: docker/build-push-action@v1
-        with:
-          username: tristandeloche
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: tristandeloche/kube-enable-coredns-on-node
-          tag_with_ref: true
+      - uses: actions/checkout@v2
 
-      - name: Push to GitHub Packages
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          registry: docker.pkg.github.com
-          repository: tristandeloche/kube-enable-coredns-on-node
-          tag_with_ref: true
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME
+
+      - name: Log into registry
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u tristandeloche --password-stdin
+
+      - name: Push image
+        run: |
+          IMAGE_ID=tristandeloche/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          echo IMAGE_ID=$IMAGE_ID
+
+          # Strip git ref prefix from version
+          REF=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          declare -a TAGS
+
+          TAGS+=($REF)
+
+          # Add tag (if present) with its "v." prefix stripped
+          if [[ "${{ github.ref }}" == "refs/tags/"* ]]; then
+            TAG_NAME=$(echo $REF | sed -e 's/^v//')
+            TAGS+=($TAG_NAME)
+          fi
+
+          # Add `latest` if it was master
+          [ "$REF" == "master" ] && TAGS+=(latest)
+
+          echo "Will push with all tags: ${TAGS[*]}"
+
+          for tag in ${TAGS[*]}; do
+            docker tag $IMAGE_NAME $IMAGE_ID:$tag
+            docker push $IMAGE_ID:$tag
+          done
