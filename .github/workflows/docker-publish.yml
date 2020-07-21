@@ -33,7 +33,7 @@ jobs:
       - name: Log into registry
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u tristandeloche --password-stdin
 
-      - name: Push image
+      - name: Push image to docker hub
         run: |
           IMAGE_ID=tristandeloche/$IMAGE_NAME
 
@@ -63,3 +63,12 @@ jobs:
             docker tag $IMAGE_NAME $IMAGE_ID:$tag
             docker push $IMAGE_ID:$tag
           done
+
+      - name: Push to GitHub Packages
+          uses: docker/build-push-action@v1
+          with:
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+            registry: docker.pkg.github.com
+            repository: tristandeloche/$IMAGE_NAME
+            tag_with_ref: true
