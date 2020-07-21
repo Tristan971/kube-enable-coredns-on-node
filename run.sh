@@ -46,7 +46,18 @@ echo ""
 echo "Will prepend $COREDNS_IP to the DNS=... values on host"
 PRE="^#?DNS=\(.*\)$"
 POST="DNS=$COREDNS_IP,\\\1"
-run_on_host "sed -E s/$PRE/$POST/g $DNS_SOURCE"
+
+if [ "${DRY_RUN:-true}" == "false" ]; then
+  BACKUP_SUFFIX="-$(date +%s)-bak"
+  echo "Not a dry run. Will apply, and write backup to ${DNS_SOURCE}${BACKUP_SUFFIX}"
+  SED_COMMAND="sed --in-place=$BACKUP_SUFFIX -E s/$PRE/$POST/g $DNS_SOURCE"
+else
+  echo "Dry run. Only showing what output would have resulted."
+  echo ""
+  SED_COMMAND="sed -E s/$PRE/$POST/g $DNS_SOURCE"
+fi
+
+run_on_host "$SED_COMMAND"
 
 echo ""
 echo "---"
