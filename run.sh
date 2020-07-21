@@ -18,7 +18,7 @@ run_on_host() {
 }
 
 idle() {
-  true
+  tail -f /dev/null
 }
 
 HOST_ORIGINAL_SRC="$(run_on_host "cat $DNS_SOURCE")"
