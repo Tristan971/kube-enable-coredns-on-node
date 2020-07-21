@@ -14,9 +14,6 @@ on:
     tags:
       - v*
 
-env:
-  IMAGE_NAME: kube-enable-coredns-on-node
-
 jobs:
 
   build:
@@ -29,7 +26,7 @@ jobs:
         with:
           username: tristandeloche
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          repository: tristandeloche/${{ env.DOCKERHUB_TOKEN }}
+          repository: tristandeloche/kube-enable-coredns-on-node
           tag_with_ref: true
 
       - name: Push to GitHub Packages
@@ -38,5 +35,5 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
-          repository: tristandeloche/${{ env.DOCKERHUB_TOKEN }}
+          repository: tristandeloche/kube-enable-coredns-on-node
           tag_with_ref: true
