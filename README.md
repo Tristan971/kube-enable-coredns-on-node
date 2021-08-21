@@ -5,6 +5,10 @@
 [![Docker layers](https://images.microbadger.com/badges/image/tristandeloche/kube-enable-coredns-on-node.svg)](https://microbadger.com/images/tristandeloche/kube-enable-coredns-on-node)
 
 #### WARNING: 
+
+    This repository will not receive support in the future. It was a PoC more than something I'd recommend.
+    Instead, you could make the ClusterIP of your target Service static and reference that.
+
     I DO NOT RECOMMEND USING THIS ON YOUR PRODUCTION CLUSTER
     
     THIS IS A WORKAROUND. 
